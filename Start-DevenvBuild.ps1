@@ -1,7 +1,7 @@
 function Start-DevenvBuild {
     [CmdletBinding()]
     param(
-        $SlnPath = "$PWD\Promail.sln",
+        $SlnPath,
         $Configuration = "Debug"
     )
     $StartTime = [System.DateTime]::Now;

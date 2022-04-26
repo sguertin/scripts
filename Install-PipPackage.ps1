@@ -1,5 +1,5 @@
 function Install-PipPackage {
-	[cmdletbinding()]
+	[CmdletBinding()]
 	param(
 		[string]$PackageName,
 		[switch]$User = $false,

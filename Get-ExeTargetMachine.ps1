@@ -90,7 +90,7 @@ function Get-ExeTargetMachine
         ## Globals ##
         $NonStandardExeFound = $false
     }
- 
+
     PROCESS {
         $Path = (Get-Item -Path $Path -ErrorAction Stop).FullName
         try
@@ -98,7 +98,7 @@ function Get-ExeTargetMachine
             $PEHeaderOffset = New-Object Byte[] $PEHeaderOffsetLocationNumBytes
             $PESignature = New-Object Byte[] $PESignatureNumBytes
             $MachineType = New-Object Byte[] $MachineTypeNumBytes
-             
+
             Write-Verbose "Opening $Path for reading."
             try
             {
@@ -112,7 +112,7 @@ function Get-ExeTargetMachine
                 }
                 throw $_    #implicit 'else'
             }
-             
+
             Write-Verbose "Moving to the header location expected to contain the location of the PE (portable executable) header."
             $FileStream.Position = $PEHeaderOffsetLocation
             $BytesRead = $FileStream.Read($PEHeaderOffset, 0, $PEHeaderOffsetLocationNumBytes)
@@ -206,8 +206,7 @@ function Get-ExeTargetMachine
                 $FileStream.Close()
             }
         }
-    }
- 
+    } 
     END {
         if($NonStandardExeFound)
         {

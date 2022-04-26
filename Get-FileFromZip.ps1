@@ -2,8 +2,8 @@ function Get-FileFromZip {
     
     [CmdletBinding()]
     param(
-        [string]$SourceFile = "build.zip",
-        [string]$FileName = "",
+        [string]$SourceFile,
+        [string]$FileName,
         [string]$Destination = $PWD
     )
 

@@ -1,29 +1,18 @@
 function Get-AzureCredentials {
     [CmdletBinding()]
     param(
-        [switch]$Development = $false,
-        [switch]$Test 
+        [string]$K8Name,
+        [string]$ResourceGroup,
+        [string]$ConfigName
     )
-    if (($Development -eq $true) -and ($Test -eq $true)) {
-        Write-Error "Development and Test flags are mutually exclusive."
-        return;
-    }
-    $userProfile = $env:USERPROFILE;
-    if ($Development -eq $true) {
-        $configName = "dev-config";
-        $resourceGroup = "vc-dev-k8s-rg";
-        $name = "vc-dev-k8s";        
-    } else {
-        $configName = "tst-config";
-        $resourceGroup = "vc-tst-k8s-rg";
-        $name = "vc-tst-k8s";
-    }
+    
+    $userProfile = $env:USERPROFILE;    
     Write-Host "Logging In...";
     Write-Host "az login"
     & az login;    
     Write-Host "Extracting Credentials...";    
-    Write-Host "az aks get-credentials --resource-group $resourceGroup --name $name";
-    & az aks get-credentials --resource-group $resourceGroup --name $name;
-    Write-Host "COPY $userProfile\.kube\config ==> $userProfile\.kube\$configName";
-    Copy-Item "$userProfile\.kube\config" -Destination "$userProfile\.kube\$configName";
+    Write-Host "az aks get-credentials --resource-group $ResourceGroup --name $K8Name";
+    & az aks get-credentials --resource-group $ResourceGroup --name $K8Name;
+    Write-Host "COPY $userProfile\.kube\config ==> $userProfile\.kube\$ConfigName";
+    Copy-Item "$userProfile\.kube\config" -Destination "$userProfile\.kube\$ConfigName";
 }
