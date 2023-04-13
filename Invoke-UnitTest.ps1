@@ -5,7 +5,7 @@ function Invoke-UnitTest {
         [string]$Configuration = "Release",
         [string]$ResultsDirectory = "TestResults"
     )
-    # Verify that the dotnet exectuable exists  
+    # Verify that the dotnet exectuable exists
     try {
         Get-Command "dotnet" -ErrorAction Stop | Out-Null
     } catch {
@@ -31,24 +31,24 @@ function Invoke-UnitTest {
             $i = 1;
             $options = @{};
             Write-Host "Multiple Unit Test projects identified within project folders";
-            foreach ($project in $projects) {                
-                $options[$i.ToString()] = $project;                
+            foreach ($project in $projects) {
+                $options[$i.ToString()] = $project;
                 Write-Host ("[$i] - " + (Resolve-Path -Relative -Path $project.FullName));
                 $i += 1;
             }
             $userInput = Read-Host "Please select a project [1-$i] or [A]ll, or [N]one";
-            
+
             if ($userInput -eq "N") {
-                Write-Host "Exitting...";
+                Write-Host "Exiting...";
             } elseif ($userInput -eq "A") {
                 Write-Host "Running all unit tests...";
-                foreach ($key in $options.Keys) {                    
+                foreach ($key in $options.Keys) {
                     & $dotnetTestFn -Path $options[$key].FullName -Configuration $Configuration -ResultsDirectory $ResultsDirectory;
                 }
             } elseif ($null -ne $options[$userInput.ToString()]) {
                 & $dotnetTestFn -Path $options[$userInput].FullName -Configuration $Configuration -ResultsDirectory $ResultsDirectory;
             } else {
-                Write-Error "Unrecognized input specified, exitting...";
+                Write-Error "Unrecognized input specified, exiting...";
                 return;
             }
 
@@ -58,10 +58,10 @@ function Invoke-UnitTest {
         } else {
             Write-Error "Unable to find any projects with 'UnitTest' in their name, please specify a project name or choose a different directory.";
             return;
-        }        
-    } else { 
+        }
+    } else {
         if ($ProjectName.EndsWith("csproj")) {
-            $projectFile = $ProjectName;        
+            $projectFile = $ProjectName;
         } else {
             $projectFile = "$ProjectName.csproj"
         }
@@ -74,7 +74,7 @@ function Invoke-UnitTest {
             }
         }
         if ($foundProject) {
-            & $dotnetTestFn -Path $pathToProject -Configuration $Configuration -ResultsDirectory $ResultsDirectory 
+            & $dotnetTestFn -Path $pathToProject -Configuration $Configuration -ResultsDirectory $ResultsDirectory
         } else {
             Write-Error "Unable to locate project: $projectFile in $PWD or child directories.";
         }

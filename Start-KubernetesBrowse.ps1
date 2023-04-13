@@ -1,8 +1,8 @@
 function Start-KubernetesBrowse {
     [CmdletBinding()]
     param(
-        $Group,
-        $Name
+        [string]$Group,
+        [string]$Name
     )
     try {
         Get-Command "az" -ErrorAction Stop | Out-Null;
@@ -11,6 +11,6 @@ function Start-KubernetesBrowse {
         return 1;
     }
     Write-Host "az aks browse --resource-group $Group --name $Name";
-    az aks browse --resource-group $Group --name $Name
+    & az aks browse --resource-group $Group --name $Name
 }
 Set-Alias -Name clusterbrowse -Value Start-KubernetesBrowse;

@@ -13,15 +13,14 @@ function Deploy-Files {
     }
     $sourceFiles = Get-ChildItem $SourceDirectory -Files;
     # Create backups and copy files
-    foreach($sourecFile in $sourceFiles) {
-        $fileName = $sourecFile.Name;
-        $targetFilePath = Join-Path $TargetDirectory -ChildPath $fileName;
+    foreach($sourceFile in $sourceFiles) {
+        $targetFilePath = Join-Path $TargetDirectory -ChildPath $sourceFile.Name;
         if (Test-Path $targetFilePath) {
             Write-Host "Backing up $targetFilePath to $backupDirectory";
             Copy-Item -Path $targetFilePath -Destination $backupDirectory -Force;
         }
-        Write-Host "Copying $fileName to $TargetDirectory....." -NoNewLine;
-        Copy-Item -Path $sourecFile -Destination $TargetDirectory -Force;
+        Write-Host "Copying $($sourceFile.Name) to $TargetDirectory....." -NoNewLine;
+        Copy-Item -Path $sourceFile -Destination $TargetDirectory -Force;
         Write-Host "Copy Complete"
     }
 }

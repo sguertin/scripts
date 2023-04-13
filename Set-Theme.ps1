@@ -6,5 +6,5 @@ function Set-Theme {
     } else {
         Write-Error "$Theme is not a known theme for oh-my-posh";
     }
-    
+
 }

@@ -3,10 +3,6 @@ function Get-HoursLogged {
     param(
         [DateTime]$Date = [DateTime]::Now
     )
-    $homeDirectory = $env:USERPROFILE;
-    $year = $Date.Year;
-    $month = $Date.Month;
-    $day = $Date.Day;
-    $filePath = "$homeDirectory\TimeTracking\TimeTracking-$year-$month-$day.log"
-    return Get-Content $filePath;
+
+    return Get-Content "$env:USERPROFILE\TimeTracking\TimeTracking-$($Date.Year)-$($Date.Month)-$($Date.Day).log";
 }

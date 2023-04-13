@@ -5,8 +5,8 @@ function New-WorkLog {
     $Year = $Date.Year.ToString().PadLeft(4,"0");;
     $Month = $Date.Month.ToString().PadLeft(2, "0");
     $Day = $Date.Day.ToString().PadLeft(2, "0");
-    $fileName = "WorkLog-$Year-$Month-$Day.md";    
-    $workLogDirectory = Join-Path $env:USERPROFILE -ChildPath "Documents" -AdditionalChildPath @("WorkLogs");    
+    $fileName = "WorkLog-$Year-$Month-$Day.md";
+    $workLogDirectory = Join-Path $env:USERPROFILE -ChildPath "Documents" -AdditionalChildPath @("WorkLogs");
     $newFile = Join-Path $workLogDirectory -ChildPath "$fileName";
     Write-Host "Checking for $newFile"
     if (Test-Path $newFile) {

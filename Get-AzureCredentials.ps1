@@ -5,14 +5,13 @@ function Get-AzureCredentials {
         [string]$ResourceGroup,
         [string]$ConfigName
     )
-    
-    $userProfile = $env:USERPROFILE;    
+
     Write-Host "Logging In...";
     Write-Host "az login"
-    & az login;    
-    Write-Host "Extracting Credentials...";    
+    & az login;
+    Write-Host "Extracting Credentials...";
     Write-Host "az aks get-credentials --resource-group $ResourceGroup --name $K8Name";
     & az aks get-credentials --resource-group $ResourceGroup --name $K8Name;
-    Write-Host "COPY $userProfile\.kube\config ==> $userProfile\.kube\$ConfigName";
-    Copy-Item "$userProfile\.kube\config" -Destination "$userProfile\.kube\$ConfigName";
+    Write-Host "COPY $env:USERPROFILE\.kube\config ==> $env:USERPROFILE\.kube\$ConfigName";
+    Copy-Item "$env:USERPROFILE\.kube\config" -Destination "$env:USERPROFILE\.kube\$ConfigName";
 }

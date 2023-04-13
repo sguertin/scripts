@@ -4,7 +4,7 @@ function Set-RemoteRepository {
         [string]$ShortName = "origin",
         [string]$Url = (Read-Host -Prompt "Enter url for remote repository")
     )
-    while ([String]::IsNullOrEmpty($Url)) 
+    while ([String]::IsNullOrEmpty($Url))
     {
         $Url = Read-Host -Prompt "Seriously, enter the url for the remote repository";
     }

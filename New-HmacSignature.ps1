@@ -6,7 +6,7 @@ function New-HmacSignature {
     )
     if ($SHA256) {
         # Write-Host "Using 256 HMACSHA";
-        $hmac = new-object -TypeName System.Security.Cryptography.HMACSHA256;    
+        $hmac = new-object -TypeName System.Security.Cryptography.HMACSHA256;
     } elseif ($SHA512) {
         # Write-Host "Using 512 HMACSHA";
         $hmac = new-object -TypeName System.Security.Cryptography.HMACSHA512;
@@ -14,6 +14,6 @@ function New-HmacSignature {
         # Write-Host "Using Default (512) HMACSHA";
         $hmac = new-object -TypeName System.Security.Cryptography.HMACSHA512;
     }
-    
+
     return [System.Convert]::ToBase64String($hmac.Key);
 }

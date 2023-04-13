@@ -12,10 +12,8 @@ function Group-FilesByDateDirectories {
             New-Item -Path $dirPath -ItemType Directory | Out-Null;
             Write-Host "Created $dirPath";
         }
-        $fullName = $file.FullName;
-        $fileName = $file.Name;
-        $destination = Join-Path -Path $dirPath -ChildPath $fileName;
-        Move-Item -Path $fullName -Destination $destination | Out-Null;
-        Write-Host "$fullname => $destination";
+        $destination = Join-Path -Path $dirPath -ChildPath $file.Name;
+        Move-Item -Path $file.FullName -Destination $destination | Out-Null;
+        Write-Host "$($file.FullName) => $destination";
     }
 }

@@ -3,5 +3,5 @@ function Get-FileVersion {
     param(
         [string]$Path
     )
-    return [System.Diagnostics.FileVersionInfo]::GetVersionInfo($Path);    
+    return [System.Diagnostics.FileVersionInfo]::GetVersionInfo($Path);
 }

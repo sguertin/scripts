@@ -18,13 +18,13 @@ function Push-GitBranch {
         }
     }
     Push-Location $Path;
-    if ($hasRemote) { 
+    if ($hasRemote) {
         Write-Host "git push";
         & git push;
     } else {
         Write-Host "git push --set-upstream origin $currentBranch";
         & git push --set-upstream origin $currentBranch;
-    }    
+    }
     Pop-Location;
 }
 Set-Alias -Name push -Value Push-GitBranch;

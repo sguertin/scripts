@@ -4,7 +4,7 @@ function Get-CommandExt {
         [string]$Path,
         [switch]$ReturnObject
     )
-    
+
     try {
         $result = Get-Command $Path -ErrorAction Stop;
         Write-Output $result.Source;

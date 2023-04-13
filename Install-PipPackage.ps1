@@ -13,16 +13,15 @@ function Install-PipPackage {
 	$command = "python -m pip install";
 
 	if ($User) {
-		$command += " --user";
+		$command += " --user ";
 	}
 	if ($Global) {
-		$command += " --global";
+		$command += " --global ";
 	}
 	if ($Upgrade) {
-		$command += " --upgrade";
+		$command += " --upgrade ";
 	}
-	$command += " $PackageName"
+	$command += $PackageName;
 	Write-Host $command;
-
-	/bin/bash -c $command;	
+	& $command;
 }

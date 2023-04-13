@@ -20,11 +20,11 @@ function Get-GitBranch {
     if ($branchExists) {
         Write-Host "git checkout $branchName";
         & git checkout $branchName;
-    } else {        
+    } else {
         if ($CreateBranch -or ((Read-Host "Branch does not exist, create new branch? [Y/n]").ToString().ToLower() == "y")) {
             Write-Host "git checkout -b $branchName";
             & git checkout -b $branchName;
         }
-    }    
+    }
 }
 Set-Alias -Name branch -Value Get-GitBranch;

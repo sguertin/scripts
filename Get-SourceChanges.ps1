@@ -3,7 +3,7 @@ function Get-SourceChanges {
     param(
         [string]$Commit = "head^1"
     )
-    
+
     if ((Test-GitExecutable) -eq $false) {
         Write-Error "git executable not found!";
         return 1;

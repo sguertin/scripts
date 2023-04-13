@@ -9,6 +9,6 @@ function Get-CurrentBranch {
     $result = & git branch --show-current;
     Write-Verbose "Pop-Location $PATH";
     Pop-Location;
-        
+
     return $result;
 }
