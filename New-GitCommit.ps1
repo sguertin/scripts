@@ -6,23 +6,30 @@ function New-GitCommit {
         [switch]$Push,
         [switch]$Force
     )
+    $commandText = "git commit"
     if ($All) {
-        Write-Host "git commit -a -m `"$Message`""
-        & git commit -a -m "$Message";
-    } else {
-        Write-Host "git commit -m `"$Message`""
-        & git commit -m "$Message";
+        $commandText = "$commandText -a"
     }
+    while ([string]::IsNullOrEmpty($Message)) {
+        $Message = Read-Host -Prompt "Please provide a commit message";
+    }
+    $commandText = "$commandText -m `"$Message`""
+    Write-Host $commandText
+    Invoke-Expression $commandText;
     if ($Push) {
-        if ($Force) {
-            Write-Host "git push --force"
-            & git push --force;
-        } else {
-            Write-Host "git push"
-            & git push;
+        $pushCommand = "git push";
+        $branch = Get-CurrentBranch;
+        $return = & git ls-remote --exit-code --heads origin $branch;
+        if ([string]::IsNullOrEmpty($return)) {
+            $pushCommand = "$pushCommand --set-upstream origin $branch";
         }
+        if ($Force) {
+            $pushCommand = "$pushCommand --force"
+        }
+        Write-Host $pushCommand;
+        Invoke-Expression $pushCommand
     } elseif ($Force) {
-        Write-Warning "Force switch is not applicable without Push switch";
+        Write-Warning "-Force is not applicable without -Push, ignoring...";
     }
 }
 Set-Alias -Name commit -Value New-GitCommit;
