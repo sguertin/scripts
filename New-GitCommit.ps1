@@ -1,13 +1,38 @@
 function New-GitCommit {
+    <#
+    .SYNOPSIS
+    Creates a new git commit
+
+    .DESCRIPTION
+    Creates a new git commit and optionally allows it to be pushed to origin
+
+    .PARAMETER Message
+    Parameter Required: The message to include with the commit
+
+    .PARAMETER StagedOnly
+    Parameter Optional: Only commit files that are currently staged
+
+    .PARAMETER Push
+    Parameter Optional: After committing, push to origin
+
+    .PARAMETER Force
+    Parameter Optional: Includes the --force flag when pushing to origin
+
+    .EXAMPLE
+    New-GitCommit -Message "Updated project versions" -Push;
+
+    .NOTES
+    Aliased as commit
+    #>
     [cmdletBinding()]
     param(
         [string]$Message,
-        [switch]$All,
+        [switch]$StagedOnly,
         [switch]$Push,
         [switch]$Force
     )
     $commandText = "git commit"
-    if ($All) {
+    if ($StagedOnly -eq $false) {
         $commandText = "$commandText -a"
     }
     while ([string]::IsNullOrEmpty($Message)) {
