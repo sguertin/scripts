@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import lru_cache
 from os import makedirs
 from pathlib import Path
+from sys import argv
 import re
 
 DATE_PATTERN = re.compile("(\d\d\d\d)-(\d\d)-(\d\d).*")
@@ -58,7 +59,9 @@ def split_log_file(filepath: Path, output_directory: Path) -> None:
 
 
 if __name__ == "__main__":
-    logs_directory = Path("C:/temp/PALogs")
+    if len(argv) < 2: # first item in argv is always the script name
+        raise IndexError("Insufficient arguments provided, expected 1 argument")
+    logs_directory = Path(argv[1])
     files_to_split: list[Path] = [
         logs_directory / "Debug.txt",
         logs_directory / "Info.txt",
