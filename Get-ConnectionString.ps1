@@ -1,9 +1,9 @@
 function Get-ConnectionString {
     [cmdletBinding()]
     param(
-        [ValidateSet("Development, Quality, Hotfix, Production")]
+        [ValidateSet("Development", "Quality", "Hotfix", "Production")]
         [string]$Environment = "Hotfix",
-        [ValidateSet("Legacy, Application")]
+        [ValidateSet("Legacy", "Application")]
         [string]$Application = "Legacy"
     )
     $connectionFilePath = Join-Path $env:USERPROFILE -ChildPath "Documents" -AdditionalChildPath @("Connections.json");
