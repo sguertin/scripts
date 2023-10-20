@@ -2,23 +2,22 @@ function Get-FileFromZip {
 
     [CmdletBinding()]
     param(
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [string]$SourceFile,
-        [string]$FileName,
+        [string]$FileName = "",
         [string]$Destination = $PWD
     )
 
     Add-Type -Assembly System.IO.Compression.FileSystem;
     $zip = [IO.Compression.ZipFile]::OpenRead("$pwd\$SourceFile");
-    if ($FileName.Equals(""))
-    {
+    if ($FileName.Equals("")) {
         $files = $zip.Entries;
-    } else
-    {
+    } else {
         $files = $zip.Entries | Where-Object { $_.Name -like $FileName };
     }
 
     foreach ($file in $files) {
-        [System.IO.Compression.ZipFileExtensions]::ExtractToFile($file, "$pwd\$file", $true);
+        [System.IO.Compression.ZipFileExtensions]::ExtractToFile($file, "$Destination\$file", $true);
     }
     $zip.Dispose();
 }
