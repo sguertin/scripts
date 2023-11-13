@@ -6,6 +6,8 @@ function Get-NextVacationDay {
 
     if ($FilePath -eq $null) {
         $FilePath = Join-Path $env:USERPROFILE -ChildPath Documents -AdditionalChildPath @('vacationDays.json');
+    } else {
+        Write-Warning "Could not find file at '$FilePath'";
     }
     If (Test-Path $FilePath) {
         $Today = (Get-Date).ToString("yyyy-MM-dd");
