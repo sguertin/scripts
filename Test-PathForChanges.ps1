@@ -8,6 +8,11 @@ function Test-PathForChanges {
 
     $pathLogFile = Join-Path $documentDirectory -ChildPath "PathVar.txt";
 
+    if ([string]::IsNullOrEmpty($env:ConEmuANSI) -eq $false) {
+        return;
+    } elseif ([string]::IsNullOrEmpty($env:TERM_PROGRAM) -eq $false) {
+        return;
+    }
     if (!(Test-Path $documentDirectory)) {
         Write-Host "No log directory found, creating..." -ForegroundColor Yellow;
         New-Item -Path $documentDirectory -ItemType Directory -Force | Out-Null;
@@ -18,14 +23,15 @@ function Test-PathForChanges {
             Write-Host "PATH variable matches prior archive" -ForegroundColor Green;
         } else {
             $logFile = Get-Item $pathLogFile;
-            $archiveName = ("PathVar-" + ($logFile.LastWriteTime.ToString("yyyy-MM-dd")) + ".txt");                
+            $archiveName = ("PathVar-" + ($logFile.LastWriteTime.ToString("yyyy-MM-dd")) + ".txt");
             if ($oldPathContent.Length -lt $currentPath.Length) {
-                Write-Host "PATH variable has been added to since it was last archived." -ForegroundColor Yellow;                
+                Write-Host "PATH variable has been added to since it was last archived." -ForegroundColor Yellow;
             } elseif ($oldPathContent.Length -gt $currentPath.Length) {
-                Write-Host "PATH variable has lost content since it was last archived." -ForegroundColor Red;                
+                Write-Host "PATH variable has lost content since it was last archived." -ForegroundColor Red;
             }
             Write-Host "COPY $pathLogFile =====================> $archiveName";
-            Copy-Item $pathLogFile -Destination $archiveName;
+            Copy-Item $pathLogFile -Destination (Join-Path $documentDirectory -ChildPath $archiveName);
+            
             Set-Content -Path $pathLogFile -Value $currentPath;
         }
     } else {
