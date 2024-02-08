@@ -6,13 +6,16 @@ function Get-NextVacationDay {
 
     if ([string]::IsNullOrEmpty($FilePath)) {
         $FilePath = Join-Path $env:USERPROFILE -ChildPath Documents -AdditionalChildPath @('vacationDays.json');
-    } 
+        Write-Debug "Defaulting file to $FilePath";
+    }
     If (Test-Path $FilePath) {
         $Today = (Get-Date).ToString("yyyy-MM-dd");
-        $VacationDays = Get-Content -Path $FilePath | ConvertFrom-Json; #@('2023-09-02', '2023-10-09', '2023-10-13', '2023-11-10', '2023-11-23', '2023-12-25');
+        $VacationDays = Get-Content -Path $FilePath | ConvertFrom-Json;
         foreach ($day in $VacationDays) {
+            Write-Debug "Comparing $Today to $day";
             $DaysRemaining = (New-TimeSpan -Start $Today -End $day).Days;
             if ($DaysRemaining -ge 1) {
+                Write-Debug "Next upcoming vacation day found: $day";
                 break;
             }
         }
@@ -26,6 +29,6 @@ function Get-NextVacationDay {
             Write-Host "No upcoming days off." -ForegroundColor Yellow;
         }
     } else {
-        Write-Warning "Could not find file at '$FilePath'";
+        Write-Error "Could not find file at $FilePath";
     }
 }
