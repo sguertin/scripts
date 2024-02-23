@@ -14,21 +14,14 @@ function Get-NextVacationDay {
         foreach ($day in $VacationDays) {
             Write-Debug "Comparing $Today to $day";
             $DaysRemaining = (New-TimeSpan -Start $Today -End $day).Days;
-            if ($DaysRemaining -ge 1) {
+            if ($DaysRemaining -ge 0) {
                 Write-Debug "Next upcoming vacation day found: $day";
-                break;
+                return [DateTime]::Parse($day);
             }
         }
-        if ($DaysRemaining -ge 1) {
-            if ($DaysRemaining -eq 1) {
-                Write-Host "IT'S THE FINAL COUNTDOWN" -ForegroundColor Green;
-            } else {
-                Write-Host "$DaysRemaining days until your next vacation!" -ForegroundColor Green;
-            }
-        } else {
-            Write-Host "No upcoming days off." -ForegroundColor Yellow;
-        }
+        return $null;        
     } else {
         Write-Error "Could not find file at $FilePath";
+        return $null;
     }
 }
