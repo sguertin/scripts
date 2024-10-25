@@ -1,7 +1,11 @@
 function Get-CustomCommands {
     [CmdletBinding()]
     param()
-    $scriptsDirectory = Join-Path $env:USERPROFILE -ChildPath "Scripts";
+    $homeDirectory = $env:USERPROFILE
+    if ([string]::IsNullOrEmpty($homeDirectory)) {
+        $homeDirectory = $env:HOME;
+    }
+    $scriptsDirectory = Join-Path $homeDirectory -ChildPath "Scripts";
     $customCommands = Get-ChildItem $scriptsDirectory -Filter "*ps1";
     if ($customCommands.Length -eq 0) {
         Write-Warning "No Custom Commands found in $scriptsDirectory!";
