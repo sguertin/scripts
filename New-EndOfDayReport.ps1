@@ -19,4 +19,5 @@ function New-EndOfDayReport {
 
     Set-Content -Path $reportFile -Value $reportContent;
 }
-Set-Alias -Name closeday -Value New-EndOfDayReport;
+Set-Alias -Name CloseDay -Value New-EndOfDayReport;
+Set-Alias -Name TaskReport -Value New-EndOfDayReport;

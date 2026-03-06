@@ -1,4 +1,4 @@
 function Start-MidDay {
     Start-TaskList "Midday";
 }
-Set-Alias -Name midday -Value Start-Day;
+Set-Alias -Name midday -Value Start-MidDay;
