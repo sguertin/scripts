@@ -9,7 +9,7 @@ function Format-XmlFile {
     .PARAMETER File
     The FileInfo object piped to this command
 
-    .PARAMETER DestinationDirectory
+    .PARAMETER Destination
     The directory to write formatted xml files to when piping files
 
     .PARAMETER FilePath
@@ -32,53 +32,60 @@ function Format-XmlFile {
 
     .EXAMPLE
     Get-ChildItem -File -Filter "*.xml" | Format-XmlFile -Destination "C:\Temp\FormattedFiles"
+    
+    .EXAMPLE
+    Format-XmlFile "test.xml"
+    
+    .EXAMPLE
+    Format-XmlFile -Path "test.xml"    
 
     .EXAMPLE
-    Format-XmlFile -FilePath "test.xml"    
+    Format-XmlFile -Path "test.xml" -NewFilePath "test_formatted.xml"
 
     .EXAMPLE
-    Format-XmlFile -FilePath "test.xml" -NewFilePath "test_formatted.xml"
+    Format-XmlFile -Path "test.xml" -Indent 4    
 
     .EXAMPLE
-    Format-XmlFile -FilePath "test.xml" -Indent 4    
-
-    .EXAMPLE
-    Format-XmlFile -FilePath "test.xml" -NewFilePath "test_formatted.xml"  -Indent 4
+    Format-XmlFile -Path "test.xml" -NewFilePath "test_formatted.xml"  -Indent 4
 
     #>
     [CmdletBinding(DefaultParameterSetName = "Path")]
     param(
         [Parameter(Mandatory, ParameterSetName = "Pipe", ValueFromPipeline = $true)][System.IO.FileInfo]$File,
-        [Parameter(ParameterSetName = "Pipe", ValueFromPipeline = $true)][string]$DestinationDirectory = "",
-        [Parameter(Mandatory, ParameterSetName = "Path")][string]$FilePath,
+        [Parameter(ParameterSetName = "Pipe")][string]$Destination = $null,
+        [Parameter(Mandatory, Position = 1, ParameterSetName = "Path")][string]$Path,
         [Parameter(ParameterSetName = "Path")][string]$NewFilePath = "",
         [int]$Indent = 2
+        
     )    
     process {
         $stringWriter = New-Object System.IO.StringWriter;
         $xmlWriter = New-Object System.XMl.XmlTextWriter $stringWriter;
         $xmlWriter.Formatting = "indented";
         $xmlWriter.Indentation = $indent;
-        if ($File -ne $null) {
-            $FilePath = $File.FullName;
+        if ($null -ne $File) {
+            $Path = $File.FullName;
             Write-Debug ("File.FullName=" + $File.FullName);            
         }    
-        if ([string]::IsNullOrEmpty($DestinationDirectory) -eq $false) {
-            Write-Debug "DestinationDirectory=$DestinationDirectory"
-            if ((Test-Path $DestinationDirectory) -eq $false) {
-                Write-Debug "New-Item $DestinationDirectory -ItemType Directory -Force;"
-                New-Item $DestinationDirectory -ItemType Directory -Force;
+        if ([string]::IsNullOrEmpty($Destination) -eq $false) {
+            Write-Debug "Destination=$Destination"
+            if ((Test-Path $Destination) -eq $false) {
+                Write-Debug "New-Item $Destination -ItemType Directory -Force;"
+                New-Item $Destination -ItemType Directory -Force;
             }
-            $NewFilePath = Join-Path $DestinationDirectory -ChildPath $File.Name;
-        } elseif ([string]::IsNullOrEmpty($NewFilePath)) {
-            $NewFilePath = $FilePath;
+            $NewFilePath = Join-Path $Destination -ChildPath $File.Name;
+        } 
+        if ([string]::IsNullOrEmpty($NewFilePath) -eq $true) {
+            $NewFilePath = $Path;
         }
         Write-Debug "NewFilePath=$NewFilePath";       
-        $xmlContent = [xml](Get-Content $FilePath -Raw);
+        $xmlContent = [xml](Get-Content $Path -Raw);
         $xmlContent.WriteContentTo($xmlWriter);
         $xmlWriter.Flush();
         $stringWriter.Flush();        
-        $formattedXml = $stringWriter.ToString();        
+        $formattedXml = $stringWriter.ToString();
+        Write-Debug ("Formatted Content Length:" + $formattedXml.Length.ToString());
+        Write-Debug "Set-Content -Path $NewFilePath -Value <XML_CONTENT> -Force;"
         Set-Content -Path $NewFilePath -Value $formattedXml -Force;
         return Get-Item "$NewFilePath";
     }
