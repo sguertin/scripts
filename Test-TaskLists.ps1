@@ -1,5 +1,5 @@
 function Test-TaskLists {
-    $tasksFolder = "C:\Users\sguertin\DailyTasks"
+    $tasksFolder = Get-TaskFolder;
     $today = (Get-Date).ToString("yyyy-MM-dd")
     $morningTaskFile = "$tasksFolder\Morning-$today.tasks"
     $midDayTaskFile = "$tasksFolder\Midday-$today.tasks"
@@ -20,7 +20,7 @@ function Test-TaskLists {
     if (($now.Hour) -ge 15) {
         if ((Test-Path $endOfDayTaskFile) -eq $false) {
             $uhOhCounter += 1;      
-            Write-Warning "Gotta start your midday tasks!"
+            Write-Warning "Gotta start your end of day tasks!"
         }
     }
     if ($uhOhCounter -gt 1) {

@@ -2,7 +2,7 @@ function Start-TaskList {
     param(
         [string]$TaskList
     )
-    $tasksFolder = "C:\Users\sguertin\DailyTasks";
+    $tasksFolder = Get-TaskFolder;
     $taskTemplate = "$tasksFolder\templates\$TaskList.tasks";
     $today = Get-Date;
     $timestamp = $today.ToString("yyyy-MM-dd");
